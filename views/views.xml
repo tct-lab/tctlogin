@@ -1,0 +1,14 @@
+<odoo>
+  <data>
+
+     <act_window id="action_tct_login"
+      name="wechat login"
+      res_model="tctlogin.tctlogin"
+      view_mode="tree,form" />
+
+        <menuitem id="menu_tct_login"
+      name="wechat login"
+      action="action_tct_login" />
+
+  </data>
+</odoo>
