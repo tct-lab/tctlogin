@@ -125,10 +125,12 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     @http.route('/web/login', type='http', auth="none" ,csrf=False)
     def web_login(self, redirect=None, **kw):
         print("zack override this route")
+        wechatname = ""
         if 'wechatname' in request.params:
+            wechatname = request.params['wechatname']
             print(request.params['wechatname'])
-        else:
-            print("no id")
+
+
         ensure_db()
         request.params['login_success'] = False
         if request.httprequest.method == 'GET' and redirect and request.session.uid:
@@ -144,7 +146,21 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
             values['databases'] = None
 
         old_uid = request.uid
-        uid = request.session.authenticate(request.session.db, 'admin', 'admin')
+
+        # if wechatname:
+        #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+        # else:
+        #     uid = request.session.authenticate(request.session.db, 'admin', 'admin')
+
+        print ('wechatname:'+wechatname)
+
+        if not wechatname:
+            wechatname = "test"
+
+        uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+
+
+
         if uid is not False:
             request.params['login_success'] = True
             if not redirect:
