@@ -100,7 +100,7 @@ def ensure_db(redirect='/web/database/selector'):
         request.session.logout()
         abort_and_redirect(request.httprequest.url)
 
-    request.session.db = 'tctdemo'
+    request.session.db = 'tctdemo1'
 
 
 class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignupHome):
@@ -122,72 +122,72 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         })
 
 
-    @http.route('/web/login', type='http', auth="none" ,csrf=False)
-    def web_login(self, redirect=None, **kw):
-        print("zack override this route")
-        wechatname = ""
-        if 'wechatname' in request.params:
-            wechatname = request.params['wechatname']
-            print(request.params['wechatname'])
+    # @http.route('/web/login', type='http', auth="none" ,csrf=False)
+    # def web_login(self, redirect=None, **kw):
+    #     print("zack override this route")
+    #     wechatname = ""
+    #     if 'wechatname' in request.params:
+    #         wechatname = request.params['wechatname']
+    #         print(request.params['wechatname'])
 
 
-        ensure_db()
-        request.params['login_success'] = False
-        if request.httprequest.method == 'GET' and redirect and request.session.uid:
-            return http.redirect_with_hash(redirect)
+    #     ensure_db()
+    #     request.params['login_success'] = False
+    #     if request.httprequest.method == 'GET' and redirect and request.session.uid:
+    #         return http.redirect_with_hash(redirect)
 
-        if not request.uid:
-            request.uid = odoo.SUPERUSER_ID
+    #     if not request.uid:
+    #         request.uid = odoo.SUPERUSER_ID
 
-        values = request.params.copy()
-        try:
-            values['databases'] = http.db_list()
-        except odoo.exceptions.AccessDenied:
-            values['databases'] = None
+    #     values = request.params.copy()
+    #     try:
+    #         values['databases'] = http.db_list()
+    #     except odoo.exceptions.AccessDenied:
+    #         values['databases'] = None
 
-        old_uid = request.uid
+    #     old_uid = request.uid
 
-        # if wechatname:
-        #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
-        # else:
-        #     uid = request.session.authenticate(request.session.db, 'admin', 'admin')
+    #     # if wechatname:
+    #     #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+    #     # else:
+    #     #     uid = request.session.authenticate(request.session.db, 'admin', 'admin')
 
-        print ('wechatname:'+wechatname)
+    #     print ('wechatname:'+wechatname)
 
-        if not wechatname:
-            wechatname = "test"
+    #     if not wechatname:
+    #         wechatname = "test"
 
-        uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+    #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
 
 
 
-        if uid is not False:
-            request.params['login_success'] = True
-            if not redirect:
-                redirect = '/web'
-            return http.redirect_with_hash(redirect)
-        request.uid = old_uid
-        values['error'] = _("Wrong login/password")
+    #     if uid is not False:
+    #         request.params['login_success'] = True
+    #         if not redirect:
+    #             redirect = '/web'
+    #         return http.redirect_with_hash(redirect)
+    #     request.uid = old_uid
+    #     values['error'] = _("Wrong login/password")
 
-        return request.render('web.login', values)
+    #     return request.render('web.login', values)
 
-    @http.route('/web/signup', type='http', auth="none" ,csrf=False)
-    def web_auth_signup(self, *args, **kw):
-        print("zack override /web/signup")
-        qcontext = self.get_auth_signup_qcontext()
+    # @http.route('/web/signup', type='http', auth="none" ,csrf=False)
+    # def web_auth_signup(self, *args, **kw):
+    #     print("zack override /web/signup")
+    #     qcontext = self.get_auth_signup_qcontext()
 
-        if not qcontext.get('token') and not qcontext.get('signup_enabled'):
-            raise werkzeug.exceptions.NotFound()
+    #     if not qcontext.get('token') and not qcontext.get('signup_enabled'):
+    #         raise werkzeug.exceptions.NotFound()
 
-        if 'error' not in qcontext and request.httprequest.method == 'POST':
-            try:
-                self.do_signup(qcontext)
-                return self.web_login(*args, **kw)
-            except (SignupError, AssertionError), e:
-                if request.env["res.users"].sudo().search([("login", "=", qcontext.get("login"))]):
-                    qcontext["error"] = _("Another user is already registered using this email address.")
-                else:
-                    _logger.error(e.message)
-                    qcontext['error'] = _("Could not create a new account.")
+    #     if 'error' not in qcontext and request.httprequest.method == 'POST':
+    #         try:
+    #             self.do_signup(qcontext)
+    #             return self.web_login(*args, **kw)
+    #         except (SignupError, AssertionError), e:
+    #             if request.env["res.users"].sudo().search([("login", "=", qcontext.get("login"))]):
+    #                 qcontext["error"] = _("Another user is already registered using this email address.")
+    #             else:
+    #                 _logger.error(e.message)
+    #                 qcontext['error'] = _("Could not create a new account.")
 
-        return request.render('auth_signup.signup', qcontext)
+    #     return request.render('auth_signup.signup', qcontext)
