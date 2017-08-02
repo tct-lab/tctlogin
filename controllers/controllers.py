@@ -43,6 +43,7 @@ sys.path.append(os.path.abspath('addons'))
 print sys.path
 import web
 import auth_signup
+import urllib2
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -135,6 +136,15 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         if 'code' in request.params:
             code = request.params['code']
             print('code:' + code)
+            token_url ="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwbf94872d6daf233a&&corpsecret=sfSXSqVzUo9eSVgeKRmzaUa1pgwIqqGX8gTPlpC6bE8"
+            req = urllib2.Request(token_url)
+            result = urllib2.urlopen(req)  # 发起GET http服务
+            res = result.read()  # 把结果通过.read()函数读取出来
+            token_info = json.loads(res)
+            print('token_info:' + token_info)
+
+
+
 
         return code
 
