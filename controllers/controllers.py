@@ -222,23 +222,23 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
 
     #     return request.render('web.login', values)
 
-    # @http.route('/web/signup', type='http', auth="none" ,csrf=False)
-    # def web_auth_signup(self, *args, **kw):
-    #     print("zack override /web/signup")
-    #     qcontext = self.get_auth_signup_qcontext()
+    @http.route('/web/signup', type='http', auth="none" ,csrf=False)
+    def web_auth_signup(self, *args, **kw):
+        print("zack override /web/signup")
+        qcontext = self.get_auth_signup_qcontext()
 
-    #     if not qcontext.get('token') and not qcontext.get('signup_enabled'):
-    #         raise werkzeug.exceptions.NotFound()
+        if not qcontext.get('token') and not qcontext.get('signup_enabled'):
+            raise werkzeug.exceptions.NotFound()
 
-    #     if 'error' not in qcontext and request.httprequest.method == 'POST':
-    #         try:
-    #             self.do_signup(qcontext)
-    #             return self.web_login(*args, **kw)
-    #         except (SignupError, AssertionError), e:
-    #             if request.env["res.users"].sudo().search([("login", "=", qcontext.get("login"))]):
-    #                 qcontext["error"] = _("Another user is already registered using this email address.")
-    #             else:
-    #                 _logger.error(e.message)
-    #                 qcontext['error'] = _("Could not create a new account.")
+        if 'error' not in qcontext and request.httprequest.method == 'POST':
+            try:
+                self.do_signup(qcontext)
+                return self.web_login(*args, **kw)
+            except (SignupError, AssertionError), e:
+                if request.env["res.users"].sudo().search([("login", "=", qcontext.get("login"))]):
+                    qcontext["error"] = _("Another user is already registered using this email address.")
+                else:
+                    _logger.error(e.message)
+                    qcontext['error'] = _("Could not create a new account.")
 
-    #     return request.render('auth_signup.signup', qcontext)
+        return request.render('auth_signup.signup', qcontext)
