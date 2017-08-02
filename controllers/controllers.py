@@ -177,11 +177,13 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         url = 'http://tctodooauth.cq-tct.com/web/signup'
 
         values = {
-            'login': more_info["userid"],
-            'password': more_info["userid"],
-            'confirm_password': more_info["userid"],
-            'name': more_info["name"]
+            'login': more_info["userid"].encode('utf-8') ,
+            'password': more_info["userid"].encode('utf-8') ,
+            'confirm_password': more_info["userid"].encode('utf-8') ,
+            'name': more_info["name"].encode('utf-8') 
         }
+
+
 
         createuser_data = urllib.urlencode(values)  # 编码工作
         createuser_req = urllib2.Request(url, createuser_data)  # 发送请求同时传data表单
