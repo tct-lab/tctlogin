@@ -164,7 +164,13 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         user_info = json.loads(user_dic)
         print(str(user_info))
 
-        return token
+        moreinfo_uri = "https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s" % (token,user_info["UserId"])
+        moreinfo_req = urllib2.Request(moreinfo_uri)
+        moreinfo_result = urllib2.urlopen(moreinfo_req)
+        moreinfo_dic = moreinfo_result.read()
+        more_info = json.loads(moreinfo_dic)
+
+        return str(more_info)
 
 
     # @http.route('/web/login', type='http', auth="none" ,csrf=False)
