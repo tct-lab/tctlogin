@@ -180,7 +180,7 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
             'login': more_info["userid"].encode('utf-8') ,
             'password': more_info["userid"].encode('utf-8') ,
             'confirm_password': more_info["userid"].encode('utf-8') ,
-            'name': more_info["name"].encode('utf-8') 
+            'name': more_info["name"].encode('utf-8')
         }
 
 
@@ -192,57 +192,61 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
 
         print("page:" +  str(the_page))
 
-        return str(more_info)
+        login_url = 'http://tctodooauth.cq-tct.com/web/login?wechatname=' + more_info["userid"].encode('utf-8');
+        print(login_url)
 
-
-    # @http.route('/web/login', type='http', auth="none" ,csrf=False)
-    # def web_login(self, redirect=None, **kw):
-    #     print("zack override this route")
-    #     wechatname = ""
-    #     if 'wechatname' in request.params:
-    #         wechatname = request.params['wechatname']
-    #         print(request.params['wechatname'])
-
-
-    #     ensure_db()
-    #     request.params['login_success'] = False
-    #     if request.httprequest.method == 'GET' and redirect and request.session.uid:
-    #         return http.redirect_with_hash(redirect)
-
-    #     if not request.uid:
-    #         request.uid = odoo.SUPERUSER_ID
-
-    #     values = request.params.copy()
-    #     try:
-    #         values['databases'] = http.db_list()
-    #     except odoo.exceptions.AccessDenied:
-    #         values['databases'] = None
-
-    #     old_uid = request.uid
-
-    #     # if wechatname:
-    #     #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
-    #     # else:
-    #     #     uid = request.session.authenticate(request.session.db, 'admin', 'admin')
-
-    #     print ('wechatname:'+wechatname)
-
-    #     if not wechatname:
-    #         wechatname = "test"
-
-    #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+        return http.redirect_with_hash(login_url)
 
 
 
-    #     if uid is not False:
-    #         request.params['login_success'] = True
-    #         if not redirect:
-    #             redirect = '/web'
-    #         return http.redirect_with_hash(redirect)
-    #     request.uid = old_uid
-    #     values['error'] = _("Wrong login/password")
+    @http.route('/web/login', type='http', auth="none" ,csrf=False)
+    def web_login(self, redirect=None, **kw):
+        print("zack override this route")
+        wechatname = ""
+        if 'wechatname' in request.params:
+            wechatname = request.params['wechatname']
+            print(request.params['wechatname'])
 
-    #     return request.render('web.login', values)
+
+        ensure_db()
+        request.params['login_success'] = False
+        if request.httprequest.method == 'GET' and redirect and request.session.uid:
+            return http.redirect_with_hash(redirect)
+
+        if not request.uid:
+            request.uid = odoo.SUPERUSER_ID
+
+        values = request.params.copy()
+        try:
+            values['databases'] = http.db_list()
+        except odoo.exceptions.AccessDenied:
+            values['databases'] = None
+
+        old_uid = request.uid
+
+        # if wechatname:
+        #     uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+        # else:
+        #     uid = request.session.authenticate(request.session.db, 'admin', 'admin')
+
+        print ('wechatname:'+wechatname)
+
+        if not wechatname:
+            wechatname = "test"
+
+        uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+
+
+
+        if uid is not False:
+            request.params['login_success'] = True
+            if not redirect:
+                redirect = '/web'
+            return http.redirect_with_hash(redirect)
+        request.uid = old_uid
+        values['error'] = _("Wrong login/password")
+
+        return request.render('web.login', values)
 
     @http.route('/web/signup', type='http', auth="none" ,csrf=False)
     def web_auth_signup(self, *args, **kw):
