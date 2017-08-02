@@ -122,6 +122,12 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         })
 
 
+    @http.route('/wechat/login', type='http', auth="none" ,csrf=False)
+    def wechat_login(self, redirect=None, **kw):
+        print("zack override this route")
+        return "Hello, wechatlogin"
+
+
     # @http.route('/web/login', type='http', auth="none" ,csrf=False)
     # def web_login(self, redirect=None, **kw):
     #     print("zack override this route")
