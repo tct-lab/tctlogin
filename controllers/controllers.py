@@ -141,7 +141,7 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
             result = urllib2.urlopen(req)  # 发起GET http服务
             res = result.read()  # 把结果通过.read()函数读取出来
             token_info = json.loads(res)
-            print('token_info:' + token_info)
+            print(str(token_info))
 
 
 
