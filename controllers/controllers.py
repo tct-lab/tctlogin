@@ -144,7 +144,6 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
 
         if token:
             print(token)
-
         else:
             print("get new token")
             token_url ="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwbf94872d6daf233a&&corpsecret=sfSXSqVzUo9eSVgeKRmzaUa1pgwIqqGX8gTPlpC6bE8"
