@@ -45,6 +45,7 @@ import web
 import auth_signup
 import urllib2
 import redis
+import urllib
 
 
 import logging
@@ -169,6 +170,25 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         moreinfo_result = urllib2.urlopen(moreinfo_req)
         moreinfo_dic = moreinfo_result.read()
         more_info = json.loads(moreinfo_dic)
+
+
+        #try to create this user
+
+        url = 'http://tctodooauth.cq-tct.com/web/signup'
+
+        values = {
+            'login': more_info["userid"],
+            'password': more_info["userid"],
+            'confirm_password': more_info["userid"],
+            'name': more_info["name"]
+        }
+
+        createuser_data = urllib.urlencode(values)  # 编码工作
+        createuser_req = urllib2.Request(url, createuser_data)  # 发送请求同时传data表单
+        createuser_response = urllib2.urlopen(createuser_req)  # 接受反馈的信息
+        the_page = createuser_response.read()  # 读取反馈的内容
+
+        print("page:" +  str(the_page))
 
         return str(more_info)
 
