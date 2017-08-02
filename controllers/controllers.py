@@ -124,8 +124,13 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
 
     @http.route('/wechat/login', type='http', auth="none" ,csrf=False)
     def wechat_login(self, redirect=None, **kw):
-        print("zack override this route")
-        return "Hello, wechatlogin"
+        print("zack wechat login")
+        return http.redirect_with_hash('https://open.weixin.qq.com/connect/oauth2/authorize?appid=wwbf94872d6daf233a&redirect_uri=auth.cq-tct.com/wechat/auth&response_type=code&scope=SCOPE&agentid=1000012&state=STATE#wechat_redirect')
+
+    @http.route('/wechat/auth', type='http', auth="none", csrf=False)
+    def wechat_login(self, redirect=None, **kw):
+        print("zack wechat auth")
+        return "we chat auth"
 
 
     # @http.route('/web/login', type='http', auth="none" ,csrf=False)
