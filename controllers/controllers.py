@@ -155,6 +155,15 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
             token = token_info["access_token"]
             r.setex("tctodooauth_token", token, 7000)
 
+        #get userinfo
+        user_uri ="https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=%s&code=%s" % (token,code)
+        print("user uri:"+user_uri)
+        user_req = urllib2.Request(user_uri)
+        user_result = urllib2.urlopen(user_req)
+        user_dic = user_result.read()
+        user_info = json.loads(user_dic)
+        print(str(user_info))
+
         return token
 
 
