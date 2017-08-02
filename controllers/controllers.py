@@ -44,6 +44,8 @@ print sys.path
 import web
 import auth_signup
 import urllib2
+import redis
+
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -132,21 +134,29 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     def wechat_auth(self, redirect=None, **kw):
         print("zack wechat auth")
         code = ''
+        r = redis.Redis(host='127.0.0.1', port=6379, db=0)
+
+        token = r.get('tctodooauth_token')
 
         if 'code' in request.params:
             code = request.params['code']
             print('code:' + code)
+
+        if token:
+            print(token)
+
+        else:
+            print("get new token")
             token_url ="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=wwbf94872d6daf233a&&corpsecret=sfSXSqVzUo9eSVgeKRmzaUa1pgwIqqGX8gTPlpC6bE8"
             req = urllib2.Request(token_url)
             result = urllib2.urlopen(req)  # 发起GET http服务
             res = result.read()  # 把结果通过.read()函数读取出来
             token_info = json.loads(res)
             print(str(token_info))
+            token = token_info["access_token"]
+            r.setex("tctodooauth_token", token, 7000)
 
-
-
-
-        return code
+        return token
 
 
     # @http.route('/web/login', type='http', auth="none" ,csrf=False)
