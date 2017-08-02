@@ -130,7 +130,13 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     @http.route('/wechat/auth', type='http', auth="none", csrf=False)
     def wechat_auth(self, redirect=None, **kw):
         print("zack wechat auth")
-        return "we chat auth"
+        code = ''
+
+        if 'code' in request.params:
+            code = request.params['code']
+            print('code:' + code)
+
+        return code
 
 
     # @http.route('/web/login', type='http', auth="none" ,csrf=False)
