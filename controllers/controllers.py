@@ -187,7 +187,7 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         createuser_req = urllib2.Request(url, createuser_data)  # 发送请求同时传data表单
         createuser_response = urllib2.urlopen(createuser_req)  # 接受反馈的信息
         the_page = createuser_response.read()  # 读取反馈的内容
-        
+
         login_url = 'http://tctodooauth.cq-tct.com/web/login?wechatname=%s&access_token=%s&code=%s' % (more_info["userid"].encode('utf-8'),token,code )
         print(login_url)
 
