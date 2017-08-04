@@ -266,3 +266,33 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
                     qcontext['error'] = _("Could not create a new account.")
 
         return request.render('auth_signup.signup', qcontext)
+
+
+    @http.route('/web/login_normal', type='http', auth="none")
+    def web_login(self, redirect=None, **kw):
+        print("zack web login normal")
+        ensure_db()
+        request.params['login_success'] = False
+        if request.httprequest.method == 'GET' and redirect and request.session.uid:
+            return http.redirect_with_hash(redirect)
+
+        if not request.uid:
+            request.uid = odoo.SUPERUSER_ID
+
+        values = request.params.copy()
+        try:
+            values['databases'] = http.db_list()
+        except odoo.exceptions.AccessDenied:
+            values['databases'] = None
+
+        if request.httprequest.method == 'POST':
+            old_uid = request.uid
+            uid = request.session.authenticate(request.session.db, request.params['login'], request.params['password'])
+            if uid is not False:
+                request.params['login_success'] = True
+                if not redirect:
+                    redirect = '/web'
+                return http.redirect_with_hash(redirect)
+            request.uid = old_uid
+            values['error'] = _("Wrong login/password")
+        return request.render('web.login', values)
