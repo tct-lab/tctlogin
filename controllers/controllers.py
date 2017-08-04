@@ -199,15 +199,14 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     def web_login(self, redirect=None, **kw):
         print("zack override this route")
 
-        if 'access_token' in request.params and 'code' in request.params:
-            user_uri = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=%s&code=%s" % (request.params['access_token'], request.params['code'])
-            print("user uri:" + user_uri)
-            user_req = urllib2.Request(user_uri)
-            user_result = urllib2.urlopen(user_req)
-            user_dic = user_result.read()
-            user_info = json.loads(user_dic)
-            if user_info['errcode'] != 0:
-                print(user_info)
+        if 'access_token' in request.params and 'wechatname' in request.params:
+            moreinfo_uri = "https://qyapi.weixin.qq.com/cgi-bin/user/get?access_token=%s&userid=%s" % (request.params['access_token'], request.params['wechatname'])
+            moreinfo_req = urllib2.Request(moreinfo_uri)
+            moreinfo_result = urllib2.urlopen(moreinfo_req)
+            moreinfo_dic = moreinfo_result.read()
+            more_info = json.loads(moreinfo_dic)
+            if more_info['errcode'] != 0:
+                print(more_info)
                 return "bad auth"
             else:
                 print("you are ok to continue")
