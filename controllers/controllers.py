@@ -199,7 +199,20 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     def web_login(self, redirect=None, **kw):
         print("zack override this route")
         print("zack request")
-        print(request.httprequest.remote_addr)
+
+        if "HTTP_X_FORWARDED_FOR" in request.httprequest.environ:
+            # Virtual host
+            ip = request.httprequest.environ["HTTP_X_FORWARDED_FOR"]
+            print("ipaddress:ip")
+            print(ip)
+        elif "HTTP_HOST" in request.httprequest.environ:
+            # Non-virtualhost
+            print("ipaddress:host")
+            ip = request.httprequest.environ["REMOTE_ADDR"]
+            print(ip)
+
+        print("http remote addr")
+        print(http.request.httprequest.remote_addr)
         wechatname = ""
         if 'wechatname' in request.params:
             wechatname = request.params['wechatname']
