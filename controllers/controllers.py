@@ -188,8 +188,6 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         createuser_response = urllib2.urlopen(createuser_req)  # 接受反馈的信息
         the_page = createuser_response.read()  # 读取反馈的内容
 
-        print("page:" +  str(the_page))
-
         login_url = 'http://tctodooauth.cq-tct.com/web/login?wechatname=' + more_info["userid"].encode('utf-8');
         print(login_url)
 
@@ -200,6 +198,8 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     @http.route('/web/login', type='http', auth="none" ,csrf=False)
     def web_login(self, redirect=None, **kw):
         print("zack override this route")
+        print("zack request")
+        print(request)
         wechatname = ""
         if 'wechatname' in request.params:
             wechatname = request.params['wechatname']
