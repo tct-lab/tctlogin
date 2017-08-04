@@ -199,7 +199,7 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     def web_login(self, redirect=None, **kw):
         print("zack override this route")
         print("zack request")
-        print(request)
+        print(request.remote_addr)
         wechatname = ""
         if 'wechatname' in request.params:
             wechatname = request.params['wechatname']
