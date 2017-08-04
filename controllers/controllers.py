@@ -198,21 +198,21 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
     @http.route('/web/login', type='http', auth="none" ,csrf=False)
     def web_login(self, redirect=None, **kw):
         print("zack override this route")
-        print("zack request")
 
-        if "HTTP_X_FORWARDED_FOR" in request.httprequest.environ:
-            # Virtual host
-            ip = request.httprequest.environ["HTTP_X_FORWARDED_FOR"]
-            print("ipaddress:ip")
-            print(ip)
-        elif "HTTP_HOST" in request.httprequest.environ:
-            # Non-virtualhost
-            print("ipaddress:host")
-            ip = request.httprequest.environ["REMOTE_ADDR"]
-            print(ip)
+        if 'access_token' in request.params and 'code' in request.params:
+            user_uri = "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=%s&code=%s" % (request.params['access_token'], request.params['code'])
+            print("user uri:" + user_uri)
+            user_req = urllib2.Request(user_uri)
+            user_result = urllib2.urlopen(user_req)
+            user_dic = user_result.read()
+            user_info = json.loads(user_dic)
+            if user_info['errcode'] != 0:
+                print(user_info)
+                return "bad auth"
+            else:
+                print("you are ok to continue")
 
-        print("http remote addr")
-        print(http.request.httprequest.remote_addr)
+
         wechatname = ""
         if 'wechatname' in request.params:
             wechatname = request.params['wechatname']
