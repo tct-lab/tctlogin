@@ -230,9 +230,9 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
         print ('wechatname:'+wechatname)
 
         if not wechatname:
-            wechatname = "test"
-
-        uid = request.session.authenticate(request.session.db, wechatname, wechatname)
+            uid = request.session.authenticate(request.session.db, "36757049@qq.com", "123456")
+        else:
+            uid = request.session.authenticate(request.session.db, wechatname, wechatname)
 
 
 
