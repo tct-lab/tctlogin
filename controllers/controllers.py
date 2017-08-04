@@ -269,8 +269,8 @@ class Tctlogin(web.controllers.main.Home,auth_signup.controllers.main.AuthSignup
 
 
     @http.route('/web/login_normal', type='http', auth="none")
-    def web_login(self, redirect=None, **kw):
-        print("zack web login normal")
+    def web_tct_normal_login(self, redirect=None, **kw):
+        print("zack web tct login normal")
         ensure_db()
         request.params['login_success'] = False
         if request.httprequest.method == 'GET' and redirect and request.session.uid:
